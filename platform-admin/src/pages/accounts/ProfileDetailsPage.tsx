@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import {Badge} from "@/components/ui/badge.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {ProfileUpdate} from "@/pages/accounts/_components/ProfileUpdate.tsx";
+import {ArrowRight} from "lucide-react";
+import {ChangePassword} from "@/pages/accounts/_components/ChangePassword.tsx";
+import {TwoFactorAuthentication} from "@/pages/accounts/_components/TwoFactorAuthentication.tsx";
 
 
 export const ProfileDetailsPage = () => {
@@ -53,12 +56,74 @@ export const ProfileDetailsPage = () => {
                         </Card>
                     </div>
 
-                    <div>
-                        <Card></Card>
+                    <div className='h-full'>
+                        <Card className='p-4 lg:p-6 h-full'>
+                            <TitleHeading
+                                title='Role & Access'
+                                classNameTitle='font-medium text-base'
+                                description=''
+                            />
+                            <div className='grid gap-3'>
+                                <div className='flex items-center justify-between'>
+                                    <Label>Role</Label>
+                                    <div>{user?.role?.name ?? "-"}</div>
+                                </div>
+                            </div>
+                            <p className='text-xs font-accent'>
+                                Full access to every module — stores, catalog, orders, payouts, delivery network, and platform settings.
+                            </p>
+
+                            <Button
+                                variant='link'
+                                className='cursor-ponter'
+                            >
+                                View permission matrix <ArrowRight />
+                            </Button>
+                        </Card>
                     </div>
                 </div>
 
                 {/* Password & Security */}
+                <div>
+                    <Card className='p-4 lg:p-6 h-full'>
+                        <TitleHeading
+                            title='Password & Security'
+                            classNameTitle='font-medium text-base'
+                            description=''
+                        />
+                        <div className=' flex items-center justify-between gap-4 lg:gap-6'>
+                            <div className='flex flex-col'>
+                                <Label>Password</Label>
+                                <div>Last changed 2 months ago</div>
+                            </div>
+                            <div>
+                                <ChangePassword />
+                            </div>
+                        </div>
+
+                        <div className='border-b'></div>
+                        <div className=' flex items-center justify-between gap-4 lg:gap-6'>
+                            <div className='flex flex-col'>
+                                <Label>Two-factor authentication</Label>
+                                <div>Extra code required at login, in addition to your password</div>
+                            </div>
+                            <div className='flex items-center gap-4'>
+                                <Badge
+                                    variant={user?.twoFactorEnabled ? "default" : 'destructive'}
+                                >
+                                    {
+                                        user?.twoFactorEnabled ? "Enable" : "Disable"
+                                    }
+                                </Badge>
+
+                                <TwoFactorAuthentication
+                                    user={user}
+                                />
+                            </div>
+                        </div>
+
+                    </Card>
+                </div>
                 {/* Session Details */}
             </div>
         </div>

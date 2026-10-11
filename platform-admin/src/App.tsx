@@ -1,5 +1,6 @@
 import './App.css'
 import Routers from "@/routes";
+import {Toaster} from "sonner";
 
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
   return (
     <main>
         <Routers />
+        <Toaster />
     </main>
   )
 }

@@ -23,4 +23,5 @@ export const authApi = {
     me: () => Axios.get<IUser>('auth/me').then((res) => res?.data),
     logout: () => Axios.post<SuccessResponse>('auth/logout').then((res) => res?.data),
     updateCurrentUser: (payload: Partial<IUser>) => Axios.put<IUser>('/users/me', payload).then((res) => res?.data),
+    changePassword: (payload: Partial<IUser>) => Axios.put<SuccessResponse>('/users/change-password', payload).then((res) => res?.data),
 }

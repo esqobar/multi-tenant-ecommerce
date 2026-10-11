@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {toast} from "sonner";
+import {useAppSelector} from "@/hooks/use-store.ts";
 
 
 export const ProfileUpdate = ({ user }: { user: IUser }) => {
@@ -21,7 +22,8 @@ export const ProfileUpdate = ({ user }: { user: IUser }) => {
         avatarName: user?.avatarName
     })
 
-    const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+    const isLoading = useAppSelector(state => state?.auth?.isLoading)
+    const [isOpen, setIsOpen] = useState<boolean>(false)
 
     useEffect(() => {
         setData(user)
@@ -37,16 +39,17 @@ export const ProfileUpdate = ({ user }: { user: IUser }) => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
-        const response = await dispatch(updateCurrentUser(data))
+        const response: any = await dispatch(updateCurrentUser(data))
 
         if (response?.payload?.success) {
             toast.success(response?.payload?.message)
+            setIsOpen(false)
         } else {
             toast.error(response?.payload?.message)
         }
     }
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline" className="cursor-pointer">
                     Edit Profile
@@ -67,7 +70,7 @@ export const ProfileUpdate = ({ user }: { user: IUser }) => {
                             className='h-10'
                             value={data?.fullName}
                             name='fullName'
-                            disabled={isSubmitting}
+                            disabled={isLoading}
                             onChange={handleChange}
                             required
                         />
@@ -81,7 +84,7 @@ export const ProfileUpdate = ({ user }: { user: IUser }) => {
                             className='h-10'
                             value={data?.email}
                             name='email'
-                            disabled={isSubmitting}
+                            disabled={isLoading}
                             onChange={handleChange}
                             required
                         />
@@ -95,7 +98,7 @@ export const ProfileUpdate = ({ user }: { user: IUser }) => {
                             className='h-10'
                             value={data?.phone}
                             name='phone'
-                            disabled={isSubmitting}
+                            disabled={isLoading}
                             onChange={handleChange}
                             required
                         />
@@ -104,7 +107,7 @@ export const ProfileUpdate = ({ user }: { user: IUser }) => {
                     <div className='col-span-2 mt-4'>
                         <Button className='mx-auto block h-10'>
                             {
-                                isSubmitting ? "Updating..." : "Update Profile"
+                                isLoading ? "Updating..." : "Update Profile"
                             }
                         </Button>
                     </div>

@@ -17,4 +17,11 @@ export class UsersController {
     return this.usersService.update(user?.userId, data)
   }
 
+  @Put('change-password')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  async ChangePassword(@CurrentUser() user : JwtAccessPayload, @Body() data: UpdateUserDto) {
+    return this.usersService.changePassword(user?.userId, data)
+  }
+
 }

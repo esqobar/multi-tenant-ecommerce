@@ -3,6 +3,13 @@ import {authApi, type loginPayload} from "@/api/auth.ts";
 import {storage} from "@/lib/storage.ts";
 import {getAxiosErrorMessage} from "@/lib/api.error.ts";
 
+export interface IRole {
+    id: string
+    name: string
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
 export interface IUser {
     id: string
     email: string
@@ -13,6 +20,8 @@ export interface IUser {
     avatarName: string
     twoFactorEnabled?: boolean;
     twoFactorSecret?: boolean;
+    password?: string
+    roles?: IRole;
     userType?: string;
     createdAt?: Date;
     updatedAt?: Date;
@@ -28,6 +37,7 @@ export interface AuthState {
     userType: USER_TYPE,
     status: AsyncStatus,
     error: string | null,
+    isLoading?: boolean,
 }
 
 const initialState: AuthState= {
@@ -36,7 +46,8 @@ const initialState: AuthState= {
     refreshToken: storage.getRefreshToken(),
     userType: 'PLATFORM_ADMIN',
     status: "idle",
-    error: null
+    error: null,
+    isLoading: false,
 }
 
 export const fetchLogin = createAsyncThunk('auth/login',
@@ -77,6 +88,17 @@ export const updateCurrentUser = createAsyncThunk('auth/updateCurrentUser',
     async (payload: Partial<IUser>, { rejectWithValue }) => {
         try {
             const data = await authApi.updateCurrentUser(payload);
+            return data
+        } catch (error) {
+            return rejectWithValue(getAxiosErrorMessage(error, "Failed to update"))
+        }
+    }
+)
+
+export const changePassword = createAsyncThunk('auth/changePassword',
+    async (payload: Partial<IUser>, { rejectWithValue }) => {
+        try {
+            const data = await authApi.changePassword(payload);
             return data
         } catch (error) {
             return rejectWithValue(getAxiosErrorMessage(error, "Failed to update"))
@@ -152,22 +174,22 @@ export const authSlice = createSlice({
 
             /* Update Current User Details */
             .addCase(updateCurrentUser.pending, (state) => {
-                state.status = 'pending'
-                state.user = null
+                state.isLoading = true
             })
             .addCase(updateCurrentUser.fulfilled, (state, action) => {
-                state.status = 'succeeded'
+                state.isLoading = false
+                const user = (action?.payload as any)?.data
                 state.user = {
                     ...state.user,
-                    fullName: action?.payload?.fullName,
-                    email: action?.payload?.email,
-                    phone: action?.payload?.phone,
-                    avatarName: `${action.payload?.fullName?.split(' ')?.[0]?.[0] ?? ""}${action.payload?.fullName?.split(' ')?.[1]?.[0] ?? ""}`
+                    fullName: user?.fullName,
+                    email: user?.email,
+                    phone: user?.phone,
+                    avatarName: `${user?.fullName?.split(' ')?.[0]?.[0] ?? ""}${user?.fullName?.split(' ')?.[1]?.[0] ?? ""}`
                 }
 
             })
-            .addCase(updateCurrentUser.rejected, (state, action) => {
-                state.status = 'failed'
+            .addCase(updateCurrentUser.rejected, (state) => {
+                state.isLoading = false
             })
 
     }
