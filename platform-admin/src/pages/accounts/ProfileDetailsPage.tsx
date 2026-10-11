@@ -3,6 +3,9 @@ import { Card } from "@/components/ui/card";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.tsx";
 import {useAppSelector} from "@/hooks/use-store.ts";
 import { Button } from "@/components/ui/button";
+import {Badge} from "@/components/ui/badge.tsx";
+import {Label} from "@/components/ui/label.tsx";
+import {ProfileUpdate} from "@/pages/accounts/_components/ProfileUpdate.tsx";
 
 
 export const ProfileDetailsPage = () => {
@@ -15,18 +18,37 @@ export const ProfileDetailsPage = () => {
             <div className='space-y-4 space-x-4 mt-4 lg:mt-6'>
 
                 {/* User Details and Role */}
-                <div className="grid grid-cols-3 gap-6 lg:gap-8">
-                    <div className="col-span-2">
-                        <Card className="p-4 lg:p-6">
-                            <div>
-                                <Avatar className='cursor-pointer w-14 h-14'>
-                                    <AvatarImage src={user?.profile_image} />
-                                    <AvatarFallback className='bg-primary font-semibold text-white'>{user?.avatarName}</AvatarFallback>
-                                </Avatar>
-                            </div>
+                <div className='grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 min-h-28'>
+                    <div className='col-span-1 lg:col-span-2 h-full'>
+                        <Card className='p-4 lg:p-6 h-full'>
+                            <div className='flex justify-between'>
+                                <div className='flex items-center gap-4'>
+                                    <Avatar className='cursor-pointer w-14 h-14'>
+                                        <AvatarImage src={user?.profile_image} />
+                                        <AvatarFallback className='bg-primary font-semibold text-white'>{user?.avatarName}</AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <div className='font-semibold text-lg truncate'>{user?.fullName}</div>
+                                        <div className='bg-primary/20 text-primary font-semibold px-3 py-1 text-xs rounded-full'>{user?.userType}</div>
+                                    </div>
+                                </div>
 
-                            <div>
-                                <Button variant="outline">Edit Profile</Button>
+                                <div>
+                                    <ProfileUpdate
+                                        user={user}
+                                    />
+                                </div>
+                            </div>
+                            <div className='grid gap-3'>
+                                <div className='flex items-center justify-between'>
+                                    <Label>Email</Label>
+                                    <div>{user?.email}</div>
+                                </div>
+                                <div className='border-b'></div>
+                                <div className='flex items-center justify-between'>
+                                    <Label>Phone</Label>
+                                    <div>{user?.phone}</div>
+                                </div>
                             </div>
                         </Card>
                     </div>

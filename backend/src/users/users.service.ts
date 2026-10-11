@@ -24,4 +24,30 @@ export class UsersService {
     })
     return data
   }
+
+
+  update(id: string, data: UpdateUserDto) {
+    const user = this.prisma.user.update({
+      where: {
+        id: id
+      },
+      data: {
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone
+      },
+      select: {
+        fullName: true,
+        email: true,
+        phone: true,
+        id: true
+      }
+    })
+
+    return {
+      success: true,
+      message: 'Updated successfully.',
+      data: user
+    }
+  }
 }

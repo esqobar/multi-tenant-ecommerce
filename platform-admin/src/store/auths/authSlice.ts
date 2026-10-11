@@ -73,6 +73,17 @@ export const logoutUser = createAsyncThunk('auth/logout',
     }
 )
 
+export const updateCurrentUser = createAsyncThunk('auth/updateCurrentUser',
+    async (payload: Partial<IUser>, { rejectWithValue }) => {
+        try {
+            const data = await authApi.updateCurrentUser(payload);
+            return data
+        } catch (error) {
+            return rejectWithValue(getAxiosErrorMessage(error, "Failed to update"))
+        }
+    }
+)
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -137,6 +148,26 @@ export const authSlice = createSlice({
             .addCase(logoutUser.rejected, (state, action) => {
                 state.status = 'failed'
                 state.error = null
+            })
+
+            /* Update Current User Details */
+            .addCase(updateCurrentUser.pending, (state) => {
+                state.status = 'pending'
+                state.user = null
+            })
+            .addCase(updateCurrentUser.fulfilled, (state, action) => {
+                state.status = 'succeeded'
+                state.user = {
+                    ...state.user,
+                    fullName: action?.payload?.fullName,
+                    email: action?.payload?.email,
+                    phone: action?.payload?.phone,
+                    avatarName: `${action.payload?.fullName?.split(' ')?.[0]?.[0] ?? ""}${action.payload?.fullName?.split(' ')?.[1]?.[0] ?? ""}`
+                }
+
+            })
+            .addCase(updateCurrentUser.rejected, (state, action) => {
+                state.status = 'failed'
             })
 
     }
