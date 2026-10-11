@@ -4,11 +4,10 @@ import {Link, useLocation} from "react-router";
 import {Field, FieldError, FieldGroup, FieldLabel} from "@/components/ui/field.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Spinner} from "@/components/ui/spinner.tsx";
-import {CheckCircle2, ShieldCheckIcon} from "lucide-react";
+import {CheckCircle2} from "lucide-react";
 import {PasswordInput} from "@/components/PasswordInput.tsx";
 
 export const ResetPasswordPage = () => {
-    const dispatch = useAppDispatch();
 
     const location = useLocation();
     const state = location.state as { email? : string, resetToken? : string } | null

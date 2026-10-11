@@ -1,31 +1,55 @@
 import { Button } from "@/components/ui/button";
 import {FieldGroup, Field, FieldLabel} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {Link} from "react-router";
+import {Link, useNavigate} from "react-router";
 import {ShieldCheckIcon} from "lucide-react";
 import {useState} from "react";
 import { Spinner } from "@/components/ui/spinner";
-import {useAppDispatch} from "@/hooks/use-store.ts";
+import {useDispatch} from "react-redux";
+import {fetchLogin} from "@/store/auths/authSlice.ts";
+import {getAxiosErrorMessage} from "@/lib/api.error.ts";
+import type {loginResponse} from "@/api/auth.ts";
 
 export default function LoginPage() {
 
-    const dispatch = useAppDispatch();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        setIsSubmitting(true)
-        setTimeout(() => {
-            setIsSubmitting(false)
-            setEmail("")
-            setPassword("")
-        }, 2000)
-    }
+        setIsSubmitting(true);
+        setError("");
+
+        try {
+            const response = await dispatch(
+                fetchLogin({ email, password })
+            ).unwrap();
+
+            if (
+                response?.accessToken &&
+                response?.refreshToken &&
+                response?.userType
+            ) {
+                navigate("/dashboard");
+            } else {
+                setError("Login response is missing required fields.");
+            }
+        } catch (error: unknown) {
+            setError(
+                typeof error === "string"
+                    ? error
+                    : getAxiosErrorMessage(error, "Failed to login")
+            );
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     return (
         <div className='w-full max-w-sm'>

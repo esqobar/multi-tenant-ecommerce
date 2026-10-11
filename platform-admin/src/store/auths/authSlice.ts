@@ -1,27 +1,77 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {authApi, type loginPayload} from "@/api/auth.ts";
+import {storage} from "@/lib/storage.ts";
+import {getAxiosErrorMessage} from "@/lib/api.error.ts";
 
-interface User {
+export interface IUser {
+    id: string
     email: string
     fullName: string
+    phone: string
+    status?: string;
+    profile_image: string
+    avatarName: string
+    twoFactorEnabled?: boolean;
+    twoFactorSecret?: boolean;
+    userType?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
-export type AsyncStatus = 'idle' | 'pending' | 'succeeded' | 'failed',
+export type AsyncStatus = 'idle' | 'pending' | 'succeeded' | 'failed'
+export type USER_TYPE = "CUSTOMER" | "SELLER" | "PLATFORM_ADMIN" | "DELIVERY_AGENT"
 
-interface AuthState {
-    user: null,
+export interface AuthState {
+    user: IUser,
     accessToken: string | null,
     refreshToken: string | null,
+    userType: USER_TYPE,
     status: AsyncStatus,
     error: string | null,
 }
 
-const initialState = {
+const initialState: AuthState= {
     user: null,
-    accessToken: "",
-    refreshToken: "",
+    accessToken: storage.getAccessToken(),
+    refreshToken: storage.getRefreshToken(),
+    userType: 'PLATFORM_ADMIN',
     status: "idle",
     error: null
 }
+
+export const fetchLogin = createAsyncThunk('auth/login',
+    async (payload: loginPayload, { rejectWithValue }) => {
+        try {
+            const tokens = await authApi.login(payload);
+            storage.setToken(tokens.accessToken, tokens.refreshToken)
+
+            return tokens
+        } catch (error) {
+            return rejectWithValue(getAxiosErrorMessage(error, "Could not sign in"))
+        }
+    }
+)
+
+export const fetchMe = createAsyncThunk('auth/me',
+    async (_, { rejectWithValue }) => {
+        try {
+            return await authApi.me()
+        } catch (error) {
+            return rejectWithValue(getAxiosErrorMessage(error, "Could not fetch"))
+        }
+    }
+)
+
+export const logoutUser = createAsyncThunk('auth/logout',
+    async (_, { rejectWithValue }) => {
+        try {
+            const data = await authApi.logout();
+            return data
+        } catch (error) {
+            return rejectWithValue(getAxiosErrorMessage(error, "Failed to fetch"))
+        }
+    }
+)
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -30,7 +80,68 @@ export const authSlice = createSlice({
         clearAuthError(state) {
             state.error = null
         }
+    },
+    extraReducers(builder) {
+        builder
+            .addCase(fetchLogin.pending, (state) => {
+                state.status = 'pending'
+                state.error = null;
+            })
+            .addCase(fetchLogin.fulfilled, (state, action) => {
+                state.status = 'succeeded'
+                state.accessToken = action.payload.accessToken
+                state.refreshToken = action.payload.refreshToken
+                state.userType = action?.payload?.userType
+            })
+            .addCase(fetchLogin.rejected, (state, action) => {
+                state.status = 'failed'
+                state.error = action.payload as string
+                state.accessToken = null;
+                state.refreshToken = null;
+                state.userType = 'PLATFORM_ADMIN'
+            })
+
+        /* Current User Details */
+            .addCase(fetchMe.pending, (state) => {
+                state.status = 'pending'
+                state.user = null
+            })
+            .addCase(fetchMe.fulfilled, (state, action) => {
+                state.status = 'succeeded'
+                state.user = {
+                    ...action.payload,
+                    avatarName: `${action.payload?.fullName?.split(' ')?.[0]?.[0] ?? ""}${action.payload?.fullName?.split(' ')?.[1]?.[0] ?? ""}`
+                }
+
+            })
+            .addCase(fetchMe.rejected, (state, action) => {
+                state.status = 'failed'
+                state.error = action.payload as string
+                state.user = null
+            })
+
+            /* Logout User */
+            .addCase(logoutUser.pending, (state) => {
+                state.status = 'pending'
+            })
+            .addCase(logoutUser.fulfilled, (state, action) => {
+                state.status = 'idle'
+                state.user = null;
+                state.accessToken = null;
+                state.refreshToken = null;
+                state.error = null;
+
+                storage.clear()
+
+            })
+            .addCase(logoutUser.rejected, (state, action) => {
+                state.status = 'failed'
+                state.error = null
+            })
+
     }
 })
 
 export default authSlice.reducer
+
+

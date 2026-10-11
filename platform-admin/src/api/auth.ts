@@ -1,0 +1,25 @@
+import Axios from "@/lib/axios";
+import type {IUser, USER_TYPE} from "@/store/auths/authSlice.ts";
+
+
+export interface loginPayload {
+    email: string;
+    password: string;
+}
+
+export interface loginResponse {
+    accessToken : string;
+    refreshToken : string;
+    userType : USER_TYPE;
+}
+
+interface SuccessResponse {
+    success : true;
+    message? : string;
+}
+
+export const authApi = {
+    login: (payload: loginPayload) => Axios.post<loginResponse>('auth/login', payload).then((res) => res?.data),
+    me: () => Axios.get<IUser>('auth/me').then((res) => res?.data),
+    logout: () => Axios.post<SuccessResponse>('auth/logout').then((res) => res?.data),
+}
