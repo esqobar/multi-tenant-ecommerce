@@ -10,23 +10,27 @@ import { Popover , PopoverTrigger, PopoverContent} from "@/components/ui/popover
 
 
 export const DashboardLayouts = () => {
-    const user = useAppSelector(state => state?.auth?.user);
-
+    const user = useAppSelector(state => state?.auth?.user)
     return (
         <SidebarProvider>
             <AppSidebar />
             <SidebarInset>
-                <main  className='bg-accent/50'>
-                    <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 bg-white">
+                <main className='bg-accent/50'>
+                    <header className="flex h-16  shrink-0 items-center gap-2 border-b px-4 bg-white">
                         <SidebarTrigger className="-ml-1" />
-                        <Separator orientation='vertical'
-                                   className="mr-2 data-[orientation=vertical]:h-4 my-auto" />
-                        <div className="w-full max-w-xs lg:max-w-sm h-10 relative">
+                        <Separator
+                            orientation='vertical'
+                            className="mr-2 data-[orientation=vertical]:h-4 my-auto"
+                        />
+                        <div className='w-full max-w-xs lg:max-w-sm h-10 relative'>
                             <SearchIcon className='size-4 absolute mt-3 ml-3 text-primary' />
-                            <Input className='w-full h-full pl-9' placeholder="Search store, order, agent...." />
+                            <Input
+                                className='w-full h-full pl-9'
+                                placeholder='search store, order, agent....'
+                            />
                         </div>
 
-                        {/* Right Section */}
+                        {/****Right Section */}
                         <div className='ml-auto'>
                             <Popover>
                                 <PopoverTrigger>
@@ -36,12 +40,16 @@ export const DashboardLayouts = () => {
                                     </Avatar>
                                 </PopoverTrigger>
                                 <PopoverContent>
-                                    <Link to={'/dashboard/my-account'} className='flex items-center gap-3'>
+                                    <Link
+                                        to={'/dashboard/my-account'}
+                                        className='flex items-center gap-3'
+                                    >
                                         <User2Icon className='size-4'/>
                                         My Account
                                     </Link>
                                 </PopoverContent>
                             </Popover>
+
                         </div>
                     </header>
                     <div className='p-4 lg:p-6 min-h-[calc(100vh-64px)] h-[calc(100vh-64px)] container mx-auto'>
@@ -50,5 +58,5 @@ export const DashboardLayouts = () => {
                 </main>
             </SidebarInset>
         </SidebarProvider>
-    );
-};
+    )
+}

@@ -12,15 +12,17 @@ import {TwoFactorAuthentication} from "@/pages/accounts/_components/TwoFactorAut
 
 
 export const ProfileDetailsPage = () => {
-    const user = useAppSelector(state => state?.auth?.user);
+    const user = useAppSelector(state => state?.auth?.user)
     return (
         <div>
-            <TitleHeading title='My Account'
-                          description={`Your profile, password, two-factor authentication, and where you're currently signed in.`} />
+            <TitleHeading
+                title='My Account'
+                description={`Your profile, password, two-factor authentication, and where you're currently signed in.`}
+            />
 
             <div className='space-y-4 space-x-4 mt-4 lg:mt-6'>
 
-                {/* User Details and Role */}
+                {/****User Details and Roles*/}
                 <div className='grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 min-h-28'>
                     <div className='col-span-1 lg:col-span-2 h-full'>
                         <Card className='p-4 lg:p-6 h-full'>
@@ -59,7 +61,7 @@ export const ProfileDetailsPage = () => {
                     <div className='h-full'>
                         <Card className='p-4 lg:p-6 h-full'>
                             <TitleHeading
-                                title='Role & Access'
+                                title='Role & access'
                                 classNameTitle='font-medium text-base'
                                 description=''
                             />
@@ -81,13 +83,16 @@ export const ProfileDetailsPage = () => {
                             </Button>
                         </Card>
                     </div>
+
                 </div>
 
-                {/* Password & Security */}
+
+
+                {/****Password & Security*/}
                 <div>
                     <Card className='p-4 lg:p-6 h-full'>
                         <TitleHeading
-                            title='Password & Security'
+                            title='Password & Securiy'
                             classNameTitle='font-medium text-base'
                             description=''
                         />
@@ -112,7 +117,7 @@ export const ProfileDetailsPage = () => {
                                     variant={user?.twoFactorEnabled ? "default" : 'destructive'}
                                 >
                                     {
-                                        user?.twoFactorEnabled ? "Enable" : "Disable"
+                                        user?.twoFactorEnabled ? "Enabled" : "Disabled"
                                     }
                                 </Badge>
 
@@ -124,8 +129,13 @@ export const ProfileDetailsPage = () => {
 
                     </Card>
                 </div>
-                {/* Session Details */}
+
+
+                {/****Session Details*/}
+
+
             </div>
+
         </div>
-    );
-};
+    )
+}

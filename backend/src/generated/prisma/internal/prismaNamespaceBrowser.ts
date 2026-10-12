@@ -53,7 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   PasswordResetOtp: 'PasswordResetOtp',
-  UserSession: 'UserSession'
+  UserSession: 'UserSession',
+  TwoFactorOtp: 'TwoFactorOtp'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -115,6 +116,19 @@ export const UserSessionScalarFieldEnum = {
 } as const
 
 export type UserSessionScalarFieldEnum = (typeof UserSessionScalarFieldEnum)[keyof typeof UserSessionScalarFieldEnum]
+
+
+export const TwoFactorOtpScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  otpHash: 'otpHash',
+  expiresAt: 'expiresAt',
+  attempts: 'attempts',
+  verifiedAt: 'verifiedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TwoFactorOtpScalarFieldEnum = (typeof TwoFactorOtpScalarFieldEnum)[keyof typeof TwoFactorOtpScalarFieldEnum]
 
 
 export const SortOrder = {

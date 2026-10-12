@@ -45,8 +45,8 @@ export const AppSidebar = () => {
             <SidebarHeader>
                 <SidebarMenu>
                     <div className="flex items-center gap-3 p-4">
-                        <img src={PlatformLogo} alt="Platform Admin Logo" className='size-9 rounded-xl'/>
-                        <span className='text-base font-bold text-white'>Platform</span>
+                        <img src={PlatformLogo} alt="Platform Admin Logo" className="size-9 rounded-xl" />
+                        <span className="text-base font-bold text-white">Platform</span>
                     </div>
                 </SidebarMenu>
             </SidebarHeader>
@@ -60,7 +60,7 @@ export const AppSidebar = () => {
                                     return (
                                         <SidebarMenuItem key={item?.href}>
                                             <SidebarMenuButton onClick={() => navigate(item.href)} className={cn(
-                                                'text-accent hover:bg-white/10 hover:text-white px-2 py-3 h-9 hover:cursor-pointer',
+                                                'text-accent hover:bg-white/10 hover:text-white px-2 py-3 h-10 hover:cursor-pointer',
                                                 isActive && 'bg-[#9fe870]/15 text-[#9fe870]'
                                             )}>
                                                 <item.Icon className='size-5' />
@@ -75,28 +75,38 @@ export const AppSidebar = () => {
                 </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>
-                <div className='flex items-center gap-2.5 rounded-md bg-white/[0.06] p-3'>
-                    <div className="flex flex-1 items-center gap-2.5 p-2">
+                <div className="flex w-full min-w-0 items-center gap-2 rounded-md bg-white/[0.06] p-3">
+                    {/* Avatar */}
+                    <Avatar className="shrink-0">
+                        <AvatarImage src={user?.profile_image} />
+                        <AvatarFallback className="bg-[#9fe870] font-semibold text-accent-foreground">
+                            {user?.avatarName}
+                        </AvatarFallback>
+                    </Avatar>
 
-                        {/* Image => AP */}
-                        <div>
-                            <Avatar>
-                                <AvatarImage src={user?.profile_image} />
-                                <AvatarFallback className='bg-[#9fe870] font-semibold text-accent-foreground'>{user?.avatarName}</AvatarFallback>
-                            </Avatar>
+                    {/* User details */}
+                    <div className="min-w-0 flex-1 overflow-hidden">
+                        <div className="truncate text-sm font-semibold text-white">
+                            {user?.fullName}
                         </div>
 
-                        {/* Full Name*/}
-                        <div className='min-w-0 flex-1'>
-                            <div className="truncate text-sm font-semibold text-white">{user?.fullName}</div>
-                            <div className="truncate text-xs text-accent">{user?.email}</div>
+                        <div className="truncate text-xs text-accent" title={user?.email}>
+                            {user?.email}
                         </div>
                     </div>
-                    <button onClick={handleLogout} className='shrink-0 cursor-pointer p-1.5 rounded-md text-accent hover:bg-white/10 hover:text-white'>
-                        <LogOut className='size-4' />
+
+                    {/* Logout button */}
+                    <button
+                        type="button"
+                        onClick={handleLogout}
+                        aria-label="Log out"
+                        title="Log out"
+                        className="shrink-0 cursor-pointer p-2 rounded-md text-accent hover:bg-white/10 hover:text-white"
+                    >
+                        <LogOut className="size-4" />
                     </button>
                 </div>
             </SidebarFooter>
         </Sidebar>
-    );
-};
+    )
+}

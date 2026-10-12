@@ -11,4 +11,5 @@
 export type * from './models/User.js'
 export type * from './models/PasswordResetOtp.js'
 export type * from './models/UserSession.js'
+export type * from './models/TwoFactorOtp.js'
 export type * from './commonInputTypes.js'

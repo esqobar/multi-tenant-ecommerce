@@ -399,7 +399,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   PasswordResetOtp: 'PasswordResetOtp',
-  UserSession: 'UserSession'
+  UserSession: 'UserSession',
+  TwoFactorOtp: 'TwoFactorOtp'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -415,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "passwordResetOtp" | "userSession"
+    modelProps: "user" | "passwordResetOtp" | "userSession" | "twoFactorOtp"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -641,6 +642,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TwoFactorOtp: {
+      payload: Prisma.$TwoFactorOtpPayload<ExtArgs>
+      fields: Prisma.TwoFactorOtpFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TwoFactorOtpFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorOtpPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TwoFactorOtpFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorOtpPayload>
+        }
+        findFirst: {
+          args: Prisma.TwoFactorOtpFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorOtpPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TwoFactorOtpFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorOtpPayload>
+        }
+        findMany: {
+          args: Prisma.TwoFactorOtpFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorOtpPayload>[]
+        }
+        create: {
+          args: Prisma.TwoFactorOtpCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorOtpPayload>
+        }
+        createMany: {
+          args: Prisma.TwoFactorOtpCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TwoFactorOtpCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorOtpPayload>[]
+        }
+        delete: {
+          args: Prisma.TwoFactorOtpDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorOtpPayload>
+        }
+        update: {
+          args: Prisma.TwoFactorOtpUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorOtpPayload>
+        }
+        deleteMany: {
+          args: Prisma.TwoFactorOtpDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TwoFactorOtpUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TwoFactorOtpUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorOtpPayload>[]
+        }
+        upsert: {
+          args: Prisma.TwoFactorOtpUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorOtpPayload>
+        }
+        aggregate: {
+          args: Prisma.TwoFactorOtpAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTwoFactorOtp>
+        }
+        groupBy: {
+          args: Prisma.TwoFactorOtpGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TwoFactorOtpGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TwoFactorOtpCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TwoFactorOtpCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -723,6 +798,19 @@ export const UserSessionScalarFieldEnum = {
 } as const
 
 export type UserSessionScalarFieldEnum = (typeof UserSessionScalarFieldEnum)[keyof typeof UserSessionScalarFieldEnum]
+
+
+export const TwoFactorOtpScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  otpHash: 'otpHash',
+  expiresAt: 'expiresAt',
+  attempts: 'attempts',
+  verifiedAt: 'verifiedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TwoFactorOtpScalarFieldEnum = (typeof TwoFactorOtpScalarFieldEnum)[keyof typeof TwoFactorOtpScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -829,6 +917,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -985,6 +1087,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   passwordResetOtp?: Prisma.PasswordResetOtpOmit
   userSession?: Prisma.UserSessionOmit
+  twoFactorOtp?: Prisma.TwoFactorOtpOmit
 }
 
 /* Types for Logging */

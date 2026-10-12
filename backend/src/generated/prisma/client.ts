@@ -56,3 +56,8 @@ export type PasswordResetOtp = Prisma.PasswordResetOtpModel
  * 
  */
 export type UserSession = Prisma.UserSessionModel
+/**
+ * Model TwoFactorOtp
+ * 
+ */
+export type TwoFactorOtp = Prisma.TwoFactorOtpModel

@@ -37,6 +37,13 @@ export default function LoginPage() {
                 response?.userType
             ) {
                 navigate("/dashboard");
+            } else if (response.requiresTwoFactor && response.twoFactorToken) {
+                navigate("/auth/2fa", {
+                    state: {
+                        email: email,
+                        twoFactorToken: response.twoFactorToken,
+                    }
+                })
             } else {
                 setError("Login response is missing required fields.");
             }

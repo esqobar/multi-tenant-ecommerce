@@ -10,6 +10,7 @@ import {ProtectedRoute} from "@/components/ProtectedRoute.tsx";
 import {SellersPage} from "@/pages/dashboards/sellers/SellersPage.tsx";
 import {CommissionPayoutPage} from "@/pages/dashboards/commission-payouts/CommissionPayoutPage.tsx";
 import {ProfileDetailsPage} from "@/pages/accounts/ProfileDetailsPage.tsx";
+import {Verify2FaOtp} from "@/pages/auths/Verify2FaOtp.tsx";
 
 export default function Routers() {
     return (
@@ -21,7 +22,7 @@ export default function Routers() {
                 <Route path="forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="forgot-password/otp" element={<VerifyForgotOtpPage />} />
                 <Route path="reset-password" element={<ResetPasswordPage />} />
-                {/*<Route path="2fa" element={<Verify2AaOTP />} />*/}
+                <Route path="2fa" element={<Verify2FaOtp />} />
             </Route>
 
             {/***Dashboard*/}

@@ -7,12 +7,15 @@ import { UsersService } from '../users/users.service.js';
 import { User } from '../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import {
+  ItwoFactorTokenPayload,
   JwtAccessPayload,
   RefreshTokenPayload,
 } from './types/jwt-payload.type.js';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import bcrypt from 'bcryptjs';
+import {randomInt} from "crypto";
+import {EmailService} from "../email/email.service.js";
 
 export interface LoginContext {
   ipAddress?: string;
@@ -24,6 +27,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
+    private readonly emailService: EmailService,
   ) {}
 
   async login(email: string, password: string, context: LoginContext  = {}) {
@@ -40,6 +44,18 @@ export class AuthService {
     /* Check Status */
     if (user!.status !== 'ACTIVE') {
       throw new ForbiddenException('This account is not active');
+    }
+
+    /* 2FA Is Enabled */
+    if (user?.twoFactorEnabled) {
+
+      const result = await this.twoFactorCreateOtpToken(user?.id)
+
+      return {
+        requiresTwoFactor: true,
+        twoFactorToken: result?.twoFactorToken,
+        message: result?.message
+      }
     }
 
     /* AccessToken and RefreshToken */
@@ -204,5 +220,218 @@ export class AuthService {
       }
     })
   }
+
+  async twoFactorEnable(userId: string) {
+
+    /* Checking If A User Exists */
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId
+      }
+    })
+
+    if (!user) {
+      throw new BadRequestException("Invalid User Id")
+    }
+
+    const generateOtp = randomInt(100000, 1000000).toString()
+    const otpHash = await bcrypt.hash(generateOtp, 10)
+
+    /* 5 Minutes Expiration */
+    const expiresAt = new Date((Date.now() + 5 ) * 60 * 60)
+    await this.prisma.twoFactorOtp.create({
+      data: {
+        userId: user.id,
+        otpHash: otpHash,
+        expiresAt: expiresAt,
+      }
+    })
+
+    this.emailService.sendOtp2FA(
+        user.fullName,
+        user.email,
+        generateOtp,
+        "5 minutes"
+    )
+
+    return {
+      success: true,
+      message: "Otp successfully sent",
+    }
+  }
+
+  async twoFactorVerifyEnable(userId: string, otp: string) {
+    /* Checking If A User Exists */
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId
+      }
+    })
+
+    if (!user) {
+      throw new BadRequestException("Invalid User Id")
+    }
+
+    const otpData = await this.prisma.twoFactorOtp.findFirst({
+      where: {
+        userId: user.id,
+        verifiedAt: null,
+        expiresAt: {
+          gt: new Date()
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    if (!otpData) {
+      throw new BadRequestException('Otp expired or invalid')
+    }
+
+    if (otpData.attempts >= 5) {
+      throw new BadRequestException('Too many verification attempts')
+    }
+
+    const isValid = await bcrypt.compare(otp, otpData.otpHash)
+
+    if (!isValid) {
+      await this.prisma.twoFactorOtp.update({
+        where: {
+          id: otpData.id
+        },
+        data: {
+          attempts: {
+            increment: 1
+          }
+        }
+      })
+
+      throw new BadRequestException("Invalid OTP")
+    }
+
+    await this.prisma.twoFactorOtp.update({
+      where: {
+        id: otpData.id
+      },
+      data: {
+        verifiedAt: new Date()
+      }
+    })
+
+    await this.prisma.user.update({
+      where: {
+        id: user.id
+      },
+      data: {
+        twoFactorEnabled: !user.twoFactorEnabled
+      }
+    })
+
+    return {
+      success: true,
+      message: `Two-Factor ${user.twoFactorEnabled ? "Disable" : "Enable"}`,
+      data: {
+        twoFactorEnabled: !user.twoFactorEnabled
+      }
+    }
+  }
+
+  /*** At the time of login Sending the otp */
+  async twoFactorCreateOtpToken(userId: string) {
+
+    const twoFactorTokenPayload:ItwoFactorTokenPayload = {
+      userId: userId,
+    }
+    /* Create Token */
+    const [twoFactorToken] = await Promise.all([
+      this.jwtService.sign(twoFactorTokenPayload, {
+        secret: this.config.getOrThrow<string>('JWT_2FA_SECRET'),
+        expiresIn: this.config.get<string>(
+            'JWT_2FA_EXPIRES_IN',
+            '15m',
+        ) as never,
+      })
+    ])
+
+    await this.twoFactorEnable(userId)
+
+    return {
+      twoFactorToken: twoFactorToken,
+      message: 'OTP Successfully sent',
+    }
+  }
+
+  /*** Verify 2fa Otp at the time of login */
+  async twoFactorVerifyLoginOtp(twoFactorToken : string, otp : string, context: LoginContext = {}) {
+
+    const decode:ItwoFactorTokenPayload = await this.jwtService.verifyAsync(twoFactorToken,{
+      secret : this.config.getOrThrow('JWT_2FA_SECRET')
+    })
+
+    if(!decode){
+      throw new BadRequestException("session is expired")
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where : {
+        id : decode?.userId
+      }
+    })
+
+    if(!user){
+      throw new BadRequestException("Something went wrong")
+    }
+
+    const otpData = await this.prisma.twoFactorOtp.findFirst({
+      where: {
+        userId: decode.userId,
+        verifiedAt: null,
+        expiresAt: {
+          gt: new Date()
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    if (!otpData) {
+      throw new BadRequestException('Otp expired or invalid')
+    }
+
+    if (otpData.attempts >= 5) {
+      throw new BadRequestException('Too many verification attempts')
+    }
+
+    const isValid = await bcrypt.compare(otp, otpData.otpHash)
+
+    if (!isValid) {
+      await this.prisma.twoFactorOtp.update({
+        where: {
+          id: otpData.id
+        },
+        data: {
+          attempts: {
+            increment: 1
+          }
+        }
+      })
+
+      throw new BadRequestException("Invalid OTP")
+    }
+
+    /* AccessToken and RefreshToken */
+    const token = await this.issueTokenPair(user, context);
+
+    /* Response */
+    return {
+      ...token,
+      userType: user.userType
+    }
+
+  }
+
+
 
 }

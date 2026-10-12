@@ -240,6 +240,7 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   passwordResetOtps?: Prisma.PasswordResetOtpListRelationFilter
   sessions?: Prisma.UserSessionListRelationFilter
+  twoFactorOtps?: Prisma.TwoFactorOtpListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -257,6 +258,7 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   passwordResetOtps?: Prisma.PasswordResetOtpOrderByRelationAggregateInput
   sessions?: Prisma.UserSessionOrderByRelationAggregateInput
+  twoFactorOtps?: Prisma.TwoFactorOtpOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -277,6 +279,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   passwordResetOtps?: Prisma.PasswordResetOtpListRelationFilter
   sessions?: Prisma.UserSessionListRelationFilter
+  twoFactorOtps?: Prisma.TwoFactorOtpListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -330,6 +333,7 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
   sessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
+  twoFactorOtps?: Prisma.TwoFactorOtpCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -347,6 +351,7 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactorOtps?: Prisma.TwoFactorOtpUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -364,6 +369,7 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
   sessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
+  twoFactorOtps?: Prisma.TwoFactorOtpUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -381,6 +387,7 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactorOtps?: Prisma.TwoFactorOtpUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -530,6 +537,20 @@ export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsInput, Prisma.UserUpdateWithoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutSessionsInput>
 }
 
+export type UserCreateNestedOneWithoutTwoFactorOtpsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTwoFactorOtpsInput, Prisma.UserUncheckedCreateWithoutTwoFactorOtpsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTwoFactorOtpsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTwoFactorOtpsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTwoFactorOtpsInput, Prisma.UserUncheckedCreateWithoutTwoFactorOtpsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTwoFactorOtpsInput
+  upsert?: Prisma.UserUpsertWithoutTwoFactorOtpsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTwoFactorOtpsInput, Prisma.UserUpdateWithoutTwoFactorOtpsInput>, Prisma.UserUncheckedUpdateWithoutTwoFactorOtpsInput>
+}
+
 export type UserCreateWithoutPasswordResetOtpsInput = {
   id?: string
   email: string
@@ -544,6 +565,7 @@ export type UserCreateWithoutPasswordResetOtpsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
+  twoFactorOtps?: Prisma.TwoFactorOtpCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPasswordResetOtpsInput = {
@@ -560,6 +582,7 @@ export type UserUncheckedCreateWithoutPasswordResetOtpsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
+  twoFactorOtps?: Prisma.TwoFactorOtpUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPasswordResetOtpsInput = {
@@ -592,6 +615,7 @@ export type UserUpdateWithoutPasswordResetOtpsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
+  twoFactorOtps?: Prisma.TwoFactorOtpUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPasswordResetOtpsInput = {
@@ -608,6 +632,7 @@ export type UserUncheckedUpdateWithoutPasswordResetOtpsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
+  twoFactorOtps?: Prisma.TwoFactorOtpUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -624,6 +649,7 @@ export type UserCreateWithoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  twoFactorOtps?: Prisma.TwoFactorOtpCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -640,6 +666,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  twoFactorOtps?: Prisma.TwoFactorOtpUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -672,6 +699,7 @@ export type UserUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  twoFactorOtps?: Prisma.TwoFactorOtpUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -688,6 +716,91 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  twoFactorOtps?: Prisma.TwoFactorOtpUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutTwoFactorOtpsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  fullName: string
+  userType: $Enums.UserType
+  status?: $Enums.UserStatus
+  twoFactorEnabled?: boolean
+  twoFactorSecret?: string | null
+  profileImage?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  sessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutTwoFactorOtpsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  passwordHash: string
+  fullName: string
+  userType: $Enums.UserType
+  status?: $Enums.UserStatus
+  twoFactorEnabled?: boolean
+  twoFactorSecret?: string | null
+  profileImage?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutTwoFactorOtpsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTwoFactorOtpsInput, Prisma.UserUncheckedCreateWithoutTwoFactorOtpsInput>
+}
+
+export type UserUpsertWithoutTwoFactorOtpsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTwoFactorOtpsInput, Prisma.UserUncheckedUpdateWithoutTwoFactorOtpsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTwoFactorOtpsInput, Prisma.UserUncheckedCreateWithoutTwoFactorOtpsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTwoFactorOtpsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTwoFactorOtpsInput, Prisma.UserUncheckedUpdateWithoutTwoFactorOtpsInput>
+}
+
+export type UserUpdateWithoutTwoFactorOtpsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  twoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTwoFactorOtpsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  userType?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  twoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  twoFactorSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -698,11 +811,13 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
 export type UserCountOutputType = {
   passwordResetOtps: number
   sessions: number
+  twoFactorOtps: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   passwordResetOtps?: boolean | UserCountOutputTypeCountPasswordResetOtpsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+  twoFactorOtps?: boolean | UserCountOutputTypeCountTwoFactorOtpsArgs
 }
 
 /**
@@ -729,6 +844,13 @@ export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.UserSessionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTwoFactorOtpsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TwoFactorOtpWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -745,6 +867,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   passwordResetOtps?: boolean | Prisma.User$passwordResetOtpsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
+  twoFactorOtps?: boolean | Prisma.User$twoFactorOtpsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -797,6 +920,7 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   passwordResetOtps?: boolean | Prisma.User$passwordResetOtpsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
+  twoFactorOtps?: boolean | Prisma.User$twoFactorOtpsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -807,6 +931,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     passwordResetOtps: Prisma.$PasswordResetOtpPayload<ExtArgs>[]
     sessions: Prisma.$UserSessionPayload<ExtArgs>[]
+    twoFactorOtps: Prisma.$TwoFactorOtpPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1217,6 +1342,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   passwordResetOtps<T extends Prisma.User$passwordResetOtpsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetOtpsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetOtpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  twoFactorOtps<T extends Prisma.User$twoFactorOtpsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$twoFactorOtpsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TwoFactorOtpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1696,6 +1822,30 @@ export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.UserSessionScalarFieldEnum | Prisma.UserSessionScalarFieldEnum[]
+}
+
+/**
+ * User.twoFactorOtps
+ */
+export type User$twoFactorOtpsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TwoFactorOtp
+   */
+  select?: Prisma.TwoFactorOtpSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TwoFactorOtp
+   */
+  omit?: Prisma.TwoFactorOtpOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TwoFactorOtpInclude<ExtArgs> | null
+  where?: Prisma.TwoFactorOtpWhereInput
+  orderBy?: Prisma.TwoFactorOtpOrderByWithRelationInput | Prisma.TwoFactorOtpOrderByWithRelationInput[]
+  cursor?: Prisma.TwoFactorOtpWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TwoFactorOtpScalarFieldEnum | Prisma.TwoFactorOtpScalarFieldEnum[]
 }
 
 /**

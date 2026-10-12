@@ -6,12 +6,13 @@ import { PrismaModule } from './prisma/prisma.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
 import {GlobalPassportModule} from "./common/passport/passport.module.js";
+import { EmailModule } from './email/email.module.js';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
     isGlobal: true
-  }),GlobalPassportModule, PrismaModule, AuthModule, UsersModule],
+  }),GlobalPassportModule, PrismaModule, AuthModule, UsersModule, EmailModule],
   controllers: [AppController],
   providers: [AppService],
 })
